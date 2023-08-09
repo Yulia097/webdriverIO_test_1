@@ -14,37 +14,30 @@ describe('Logo Click Test', () => {
   });
 
   after(async () => {
-    // 2. Закриття браузера після завершення тестування
     await browser.deleteSession();
   });
 
-  describe('Logo click functionality', () => {
+  describe('terms & conditons click functionality', () => {
     it('should navigate to the home page after clicking the logo', async () => {
-      // 3. Відкриття веб-сторінки
-      await browser.url('https://www.we-pdf.com/');
+      await browser.url('https://pixabay.com/');
+      const locator = await browser.$(
+        '//a[contains(text(), "Terms of Service")]'
+      );
 
-      // 4. Клік на логотип
-      const logoElement = await browser.$('css-lb9fd6');
-      await logoElement.click();
-
-      // 5. Очікування переходу на домашню сторінку
+      await locator.click();
       await browser.waitUntil(
         async () => {
-          const currentUrl = await browser.getUrl();
-          return currentUrl === 'https://www.we-pdf.com/';
+          const currentURL = await browser.getUrl();
+          return currentURL !== 'https://pixabay.com/'; // Replace 'initialURL' with the initial URL before clicking the element
         },
         {
-          timeout: 5000
+          timeout: 10000,
+          timeoutMsg: 'Navigation did not complete within 5 seconds'
         }
       );
 
-      // 6. Перевірка URL після кліку на логотип
       const currentUrl = await browser.getUrl();
-      assert.strictEqual(
-        currentUrl,
-        'https://www.we-pdf.com/',
-        'Перехід на домашню сторінку НЕ відбувся'
-      );
+      expect(currentUrl).toEqual('https://pixabay.com/service/terms/');
     });
   });
 });
