@@ -1,0 +1,26 @@
+describe('Authorization Test', () => {
+  let browser;
+
+  before(async () => {
+    browser = await remote({
+      capabilities: {
+        browserName: 'chrome'
+      }
+    });
+  });
+
+  after(async () => {
+    await browser.deleteSession();
+
+    it('should verify user authorization with specific user ID', async () => {
+      await browser.url('https://pixabay.com');
+
+      await browser.execute((userId) => {
+        document.cookie = `user_id=${userId}`;
+      }, 'user_id:36004956 ');
+
+      const authorizedElement = await browser.$('.//img[@alt="u_9sa10i8va1"]');
+      expect(authorizedElement).toBeExisting();
+    });
+  });
+});
