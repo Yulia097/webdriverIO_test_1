@@ -1,4 +1,6 @@
-describe('Authorization Test', () => {
+const { remote } = require('webdriverio');
+
+describe('Login with Google Test', () => {
   let browser;
 
   before(async () => {
@@ -11,16 +13,27 @@ describe('Authorization Test', () => {
 
   after(async () => {
     await browser.deleteSession();
+  });
 
-    it('should verify user authorization with specific user ID', async () => {
-      await browser.url('https://pixabay.com');
+  it('should log in with Google successfully on Pixabay', async () => {
+    await browser.url('https://pixabay.com/');
 
-      await browser.execute((userId) => {
-        document.cookie = `user_id=${userId}`;
-      }, 'user_id:36004956 ');
+    await browser.waitUntil(
+      async () => {
+        const googleLoginButton = await browser.$(
+          'button[class="button--Xk14x google--xxLcM"]'
+        );
+        await googleLoginButton.click();
 
-      const authorizedElement = await browser.$('.//img[@alt="u_9sa10i8va1"]');
-      expect(authorizedElement).toBeExisting();
-    });
+        const loggedInElement = await browser.$(
+          '//ul[@class="pure-menu-children"]//a[contains(text(),"My profile")]'
+        );
+        expect(loggedInElement).toBeExisting();
+      },
+      {
+        timeout: 5000,
+        timeoutMsg: 'Timeout Error'
+      }
+    );
   });
 });
