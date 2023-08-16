@@ -1,6 +1,6 @@
 const { remote } = require('webdriverio');
 
-describe('Photo Like Test', () => {
+describe('Subscription Test', () => {
   let browser;
 
   before(async () => {
@@ -15,12 +15,13 @@ describe('Photo Like Test', () => {
     await browser.deleteSession();
   });
 
-  it('should log in and like a photo with specified username and password', async () => {
+  it('should log in, subscribe to a user, and verify subscription status', async () => {
     const username = 'testforqaq';
     const password = 'test12345';
 
     await browser.url('https://pixabay.com');
 
+    // Login
     const loginButton = await browser.$('//span[normalize-space()="Log in"]');
     await loginButton.click();
 
@@ -34,46 +35,34 @@ describe('Photo Like Test', () => {
     );
     await submitButton.click();
 
+    // Wait for successful login
     await browser.waitUntil(
-      async () => {
-        const isLoggedIn = await browser
-          .$('//img[@alt="u_9sa10i8va1"]')
-          .isExisting();
-        return isLoggedIn;
-      },
+      async () => await browser.$('img[alt="User Profile Image"]').isExisting(),
       {
         timeout: 60000,
         timeoutMsg: 'Timeout waiting for user to log in'
       }
     );
-
     console.log('User logged in successfully');
 
-    await browser.url('https://pixabay.com');
-    const photoLocator = await browser.$(
-      '//div[@class="verticalMasonry--RoKfF lg--v7yE8"]//div[1]//div[1]//div[1]//div[1]//div[1]'
+    // Navigate to a user's profile and subscribe
+    await browser.url('https://pixabay.com/users/username'); // Replace 'username' with the actual username
+    const subscribeButton = await browser.$(
+      'button[class="follow--h2qlj buttonBase--r4opq tertiaryButton--+4ehJ base--jzyee light--uBcBI"] span[class="label--Ngqjq"]'
     );
-    await photoLocator.click();
+    await subscribeButton.click();
 
-    const likeButton = await browser.$(
-      '//button[@class="squareIconAndTextButton--LErXp light--uBcBI base--jzyee light--uBcBI"]'
-    );
-    await likeButton.click();
-
+    // Wait for subscription status change
     await browser.waitUntil(
       async () => {
-        const buttonColor = await likeButton.getCSSProperty('color');
-        return buttonColor.parsed.hex === '#00ab6b';
+        const buttonLabel = await subscribeButton.getText();
+        return buttonLabel === 'Following';
       },
       {
         timeout: 80000,
-        timeoutMsg: 'Like button color did not change within 80 seconds'
+        timeoutMsg: 'Subscription status did not change within 80 seconds'
       }
     );
+    console.log('User subscribed successfully');
   });
 });
-
-//00ab6b - color of the btn
-// - стан кнопки
-// switch between pages
-// share photo with facebook
