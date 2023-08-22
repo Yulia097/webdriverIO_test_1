@@ -16,9 +16,9 @@
     "@wdio/local-runner": "^8.12.1",
     "@wdio/mocha-framework": "^8.12.1",
     "@wdio/spec-reporter": "^8.12.1",
-    "chromedriver": "^114.0.3",
+    "chromedriver": "116.0.5845.96",
     "geckodriver": "^4.0.4",
-    "wdio-chromedriver-service": "^16.0.0",
+    "wdio-chromedriver-service": "116.0.5845.96",
     "wdio-geckodriver-service": "^5.0.1"
   },
   "dependencies": {

@@ -1,6 +1,16 @@
 const { remote } = require('webdriverio');
 const axios = require('axios');
 const fs = require('fs');
+const { remote } = require('webdriverio');
+
+const browser = await remote({
+  capabilities: {
+    browserName: 'chrome',
+    chromeOptions: {
+      binary: '/Users/ruslanmoiseyenko/Desktop/chromedriver' // Замените путь на фактический путь к ChromeDriver
+    }
+  }
+});
 
 describe('Image Download Test', () => {
   let browser;

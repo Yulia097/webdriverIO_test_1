@@ -21,7 +21,7 @@ exports.config = {
   // then the current working directory is where your `package.json` resides, so `wdio`
   // will be called from there.
   //
-  specs: ['./test/specs/pixabey_main.js/language_switch.js'],
+  specs: ['./test/specs/pixabey_main.js/photo_like.js'],
 
   // Patterns to exclude.
   exclude: [
@@ -51,7 +51,12 @@ exports.config = {
   //
   capabilities: [
     {
-      browserName: 'chrome'
+      browserName: 'chrome',
+      'goog:chromeOptions': {
+        // Укажите путь к символьной ссылке chromedriver
+        binary: '/usr/local/bin/chromedriver',
+        args: ['116.0.5845.96']
+      }
     }
   ],
 
